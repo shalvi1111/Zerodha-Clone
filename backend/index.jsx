@@ -9,17 +9,26 @@ const  PositonsModel  = require("./models/PositionsModel.jsx");
 const cors =  require("cors");
 const bodyParser = require("body-parser");
 const  OrdersModel  = require("./models/OrdersModel.jsx");
-
-
+const UserModel = require("./models/UserModels.jsx");
+ const {createSecretToken} = require("./util/SecretToken.js");
+ const jwt = require("jsonwebtoken");
+ const cookeieParser = require("cookie-parser");
 const PORT = process.env.PORT || 8000 ;
-
+ 
  const url = process.env.MONGO_URL;
 
 const app = express();
-app.use(cors());
+app.use(cors(
+  {
+    origin: ["http://localhost:8000"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  }
+));
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookeieParser());
 
 main().catch(err => console.log(err));
 
@@ -303,6 +312,89 @@ app.get("/allPositions" , async(req,res)=>{
   let PositionsData = await PositonsModel.find({});
   res.json(PositionsData);
 });
+
+  app.post("/login" , async(req,res,next)=>{
+    try{
+       const {email , password } = req.body ; 
+    if(!email || !password ){
+      return res.json( {message : "All fields are required1"});
+    }
+
+    const user = await UserModel.findOne({email});
+
+    if(user){
+      return res.json( {message : "Incorrect password and email"});
+    }
+
+    const auth = await bcypt.compare(password , user.password);
+
+    if(!auth){
+      return res.json({ message : "Incorrect email or password"});
+    }
+
+    const token = createSecretToken(user._id);
+     res.cookie("token", token, {
+       withCredentials: true,
+       httpOnly: false,
+     });
+     res.status(201).json({ message: "User logged in successfully", success: true });
+     next();
+     }
+     catch(err){
+      console.log(err);
+     }
+
+  }) ;
+
+
+  app.post("/signup" , async(req,res,next)=>{
+    try{
+    const {email , username , password , createdAt} = req.body;
+    const existingUser = await UserModel.findOne( {email});
+    if(existingUser){
+      return res.json( {message : "User already exists"});
+    }
+
+    const user = await UserModel.create( {email , username , password , createdAt});
+    const token = createSecretToken(user._id);
+    res.cookie( "token" , token ,
+       {
+      withCredentials : true ,
+      httpOnly: false
+      }
+    )
+
+    res.status( 201).json({message : "User signed successfully" , success : true , user}) ;
+    next();
+  }
+    catch(err){
+      console.log(err);
+    }
+  });
+
+
+    app.post("/userVerfication" , async(req,res)=>{
+      const token = req.cookies.token ;
+      if(token){
+        return res.json({status : false})
+      }
+
+      jwt.verify( token , process.env.TOKEN_KEY , async( err, data) =>{
+        console.log(token);
+        if(err){
+          return res.json( {status : false});
+        }
+        else{
+          const user = await UserModel.findById(data.id);
+          if(user){
+            return res.json( {status : true , user : user.username});
+          }
+          else{
+            return res.json( {status : false});
+          }
+        }
+      })
+    })
 
 app.listen( PORT ,()=>{
     console.log(`Server is working  ${PORT}`);
