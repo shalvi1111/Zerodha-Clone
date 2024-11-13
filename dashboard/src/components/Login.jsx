@@ -29,7 +29,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
+  
       const { data } = await axios.post(
         "http://localhost:8000/login",
         {
@@ -47,9 +47,8 @@ const Login = () => {
       } else {
         handleError(message);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    
+
     setInputValue({
       ...inputValue,
       email: "",
@@ -61,7 +60,7 @@ const Login = () => {
     <div className="form_container text-center p-5 m-5">
          <img src="./logo.png" alt="Logo" style={{width : "10%"}}/>
       <h2 className="p-2 mt-4">Login Account</h2>
-      <form onSubmit={handleSubmit} method="POST" action="/login">
+      <form onSubmit={handleSubmit} >
         <div className="p-2 mb-2">
           <label htmlFor="email">Email : &nbsp;</label>
           <input
