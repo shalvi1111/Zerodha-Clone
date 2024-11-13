@@ -1,51 +1,134 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-const Signup = () =>{
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer } from "react-toastify";
 
-     const [allInfo , setAllInfo] = useState([]);
+const Signup = () => {
+  // const navigate = useNavigate();
+  const [inputValue, setInputValue] = useState({
+    email: "",
+    password: "",
+    username: "",
+  });
+  const { email, password, username } = inputValue;
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setInputValue({
+      ...inputValue,
+      [name]: value,
+    });
+  };
+  
+  const handleSubmit = async () => {
+    try {
+      await axios.post('/api/user', inputValue); // Sends formData to your endpoint
+      alert("Data submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting data:", error);
+    }
+  };
+  // const handleError = (err) =>
+  //   toast.error(err, {
+  //     position: "bottom-left",
+  //   });
+  // const handleSuccess = (msg) =>
+  //   toast.success(msg, {
+  //     position: "bottom-right",
+  //   });
 
-       useEffect( () =>{
-         axios.post("http://localhost:8000/signup")
-         .then( (res) =>{
-            console.log(res.data);
-            setAllInfo(res.data);
-         })
-       } , []) ;
-
-    return ( 
-        <>
-         <div className="container p-5 m-5 text-center">
-            <div className="row mb-5">
-                <div className="col-7">
-                    <img src='./images/signup.png' alt='Signup'/>
-                </div>
-                <div className="col-5">
-                    <h1>Signup now {allInfo}</h1>
-                    <p className='text-muted fs--2 mt-4'>Or track your existing application.</p>
-                     <fieldset>
-                        <legend>Mobile Number</legend>
-                        <input type='tel' name='phone' pattern='[0-9]{10}'/>
-                     </fieldset>
 
 
-                    {/* <label forname= "phone" className='text-muted'>Mobile Number</label>
-                    <input type='tel' name='phone' pattern='[0-9]{10}'/> */}
+  
+  return (
+    <div className="form_container p-5 m-5 text-center">
+      <img src="./logo.png" alt="Logo" style={{width : "10%"}}/>
+      <h2 className="p-2 m-4" >Signup Account</h2>
+      <form onSubmit={handleOnChange} method="POST" action="/signup">
+        <div className="p-2 m-2">
+          <label htmlFor="email">Email : &nbsp;</label>
+          <input
+            type="email"
+            name="email"
+            value={email}
+            placeholder="Enter your email"
+            onChange={handleOnChange}
+            style={{width:"50%"}}
+          />
+        </div>
+        <div className="p-2 m-2"> 
+          <label htmlFor="email">Username : &nbsp;</label>
+          <input
+            type="text"
+            name="username"
+            value={username}
+            placeholder="Enter your username"
+            onChange={handleOnChange}
+            style={{width:"50%"}}
+          />
+        </div>
+        <div className="p-2 m-2">
+          <label htmlFor="password">Password : &nbsp;</label>
+          <input
+            type="password"
+            name="password"
+            value={password}
+            placeholder="Enter your password"
+            onChange={handleOnChange}
+            style={{width:"50%"}}
+          />
+        </div>
+        <button className="p-2 m-4 fs-5" type="submit" style={{backgroundColor : "orangered", color:"white" , width:"40%"}} onClick={handleSubmit}>Submit</button>
+        <br></br>
+        <span>
+          Already have an account? <Link to={"/login"}>Login</Link>
+        </span>
+       </form>
+      <ToastContainer />
+    </div>
+  );
+};
 
-                    <p className='text-muted mt-5 mb-5'>You will receive an OTP on your number</p>
-                    <button type='submit'className="btn btn-primary mb-4">Continue</button><br></br>
-                    {/* <a to='#' style={{textDecoration:"none" , fontSize:"-10"}}>Want to open an NRI account</a> */}
-                   
-                </div>
-            </div>
-            <div className='text-muted'>
-            <p>I authorise Zerodha to contact me even if my number is registered on DND. I authorise Zerodha to fetch my KYC information from the C-KYC registry with my PAN. Please visit <Link to=''> this article </Link>  to know more.
-            </p>
-            <p>If you are looking to open a HUF, Corporate, Partnership, or NRI account, you have to use the offline forms. For help,<Link to=''>click here</Link> .</p>
-            </div>
-         </div>
-        </>
-     );
-}
+
+
+//    // Building my own signup page
+  //  return (
+      
+  //     <div className="form-container p-5 m-5 text-center" >
+  //       <h2 className='fs-2  m-2' style={{color:"#4184f3"}}><i>Signup Account for Zerodha {allInfo}</i></h2>
+  //       <form className='p-2 m-2'>
+  //          <div className="row text-center p-5 m-2">
+
+  //           <div className="col-8 m-4">
+  //           <label><b>Username :</b></label> &nbsp;  &nbsp; 
+  //           <input type='text' placeholder='Enter your username' style={{width :"70%" , borderRadius:"2%"}}></input>
+  //           </div>
+            
+  //           <div className="col-8 m-4">
+  //           <label ><b>Email :</b></label>  &nbsp;  &nbsp; 
+  //           <input type='text' placeholder='Enter your email'style={{width :"70%" , borderRadius:"2%"}} ></input>
+  //           </div>
+              
+  //            <div className="col-8 m-4">
+  //             <label><b>Password :</b></label>  &nbsp;  &nbsp; 
+  //             <input type='text' placeholder='Enter your password' style={{width :"70%" , borderRadius:"2%"}}></input>
+  //            </div>
+               
+  //               <form>
+  //               <div className="col-8">
+  //             <button className='btn' style={{width:"25%"}}>Submit</button>
+  //             </div>
+  //               </form>
+
+  //          </div>
+       
+  //        </form>
+  //        </div>
+      
+  //   );
+  // };
+
+  
+
+
 
 export default Signup;
