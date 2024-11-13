@@ -62,6 +62,22 @@ const Menu = () => {
               </Link>
               
           </li>
+
+          <li>
+            <Link style={{textDecoration :"none"}} to ="/signup" 
+              onClick={ ()=> handleMenuClick(6)}>
+                <p className= {selectedMenu === 6 ? activeMenuClass : menuClass}>Signup</p>
+              </Link>
+              
+          </li>
+
+          <li>
+            <Link style={{textDecoration :"none"}} to ="/login" 
+              onClick={ ()=> handleMenuClick(7)}>
+                <p className= {selectedMenu === 7 ? activeMenuClass : menuClass}>Login</p>
+              </Link>
+              
+          </li>
         </ul>
         <hr />
         <div className="profile" onClick={handleProfileClick}>
