@@ -31,7 +31,8 @@ const Login = () => {
     e.preventDefault();
   
       const { data } = await axios.post(
-        "http://localhost:8000/login",
+        // "http://localhost:8000/login",
+        "https://zerodha-backend-dashboard-clone.vercel.app/login",
         {
           ...inputValue,
         },

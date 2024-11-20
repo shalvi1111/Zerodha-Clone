@@ -6,7 +6,8 @@ const Positions = () => {
   const [allPositions , setAllPositions] = useState([]);
 
   useEffect( ()=>{
-    axios.get("http://localhost:8000/allPositions")
+    // axios.get("http://localhost:8000/allPositions")
+    axios.get("https://zerodha-backend-dashboard-clone.vercel.app/allPositions")
     .then( (res)=>{
       console.log(res.data);
       setAllPositions(res.data);

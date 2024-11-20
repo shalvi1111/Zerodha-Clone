@@ -18,7 +18,8 @@ const BuyActionWindow = ({uid}) => {
  
   const handleBuyClick = () => {
     console.log("UID:", uid); 
-    axios.post("http://localhost:8000/newOrder" 
+    // axios.post("http://localhost:8000/newOrder" 
+    axios.post("https://zerodha-backend-dashboard-clone.vercel.app/newOrder"
 , {
       name: uid,
       qty: stockQuantity,

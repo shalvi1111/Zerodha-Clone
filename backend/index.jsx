@@ -441,6 +441,7 @@ const app = express();
 const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = ['http://localhost:3001','http://localhost:3000','http://localhost:3002'];
+    // const allowedOrigins = ['https://zerodha-backend-dashboard-clone.vercel.app/'];
     
     if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);

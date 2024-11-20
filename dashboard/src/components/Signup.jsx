@@ -167,7 +167,8 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-      await axios.post('http://localhost:8000/signup', inputValue); // Sends formData to your endpoint
+      // await axios.post('http://localhost:8000/signup', inputValue); // Sends formData to your endpoint
+       await axios.post("https://zerodha-backend-dashboard-clone.vercel.app/signup" , inputValue);
       alert("Data submitted successfully!");
 
    };

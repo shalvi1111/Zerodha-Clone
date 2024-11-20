@@ -14,7 +14,8 @@ const Authentication = () => {
         navigate("/login");
       }
       const { data } = await axios.post(
-        "http://localhost:8000",
+        // "http://localhost:8000",
+        "https://zerodha-backend-dashboard-clone.vercel.app/",
         {},
         { withCredentials: true }
       );
